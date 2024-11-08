@@ -1,0 +1,40 @@
+class Solution {
+    static class MeetingComparator implements Comparator<int[]> {
+        public int compare(int[] a, int[] b) {
+            return Integer.compare(a[1], b[1]);
+        }
+    }
+    public int maxMeetings(int[] start, int[] end) {
+       //your code goes here
+       int n = start.length;
+        // List to store meetings with their start and end times
+        List<int[]> meetings = new ArrayList<>();
+
+        // Fill the meetings list with start and end times
+        for (int i = 0; i < n; i++) {
+            meetings.add(new int[]{start[i], end[i]});
+        }
+
+        // Sort the meetings by their end times using the custom comparator
+        Collections.sort(meetings, new MeetingComparator());
+
+        // The end time of the last selected meeting
+        int limit = meetings.get(0)[1];
+        // Initialize count for the first meeting selected
+        int count = 1;
+
+        // Iterate through the sorted meetings to select non-overlapping meetings
+        for (int i = 1; i < n; i++) {
+            // If the current meeting starts after the last selected meeting ends
+            if (meetings.get(i)[0] > limit) {
+                // Update the limit to the end time of the current meeting
+                limit = meetings.get(i)[1];
+                // Increment count as this meeting is selected
+                count++;
+            }
+        }
+
+        // Return the maximum number of non-overlapping meetings that can be attended
+        return count;
+    }
+}
